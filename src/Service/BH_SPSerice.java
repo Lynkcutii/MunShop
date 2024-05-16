@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import Repo.DBConnect1;
 import Model.BanHang_SP;
+import Repo.DBConnect;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class BH_SPSerice {
 "join ThuongHieu t on t.id = sct.id_thuong_hieu\n" +
 "join LoaiAo l on l.id = sct.id_loai_ao\n" +
 "join Mau m on m.id = sct.id_mau";
-        Connection c = DBConnect1.getConnection();
+        Connection c = DBConnect.getConnection();
         try {
             PreparedStatement pstm = c.prepareStatement(sql);
             ResultSet rs = pstm.executeQuery();
@@ -59,7 +60,7 @@ public class BH_SPSerice {
             "join LoaiAo l on l.id = sct.id_loai_ao " +
             "join Mau m on m.id = sct.id_mau " + // Add a space here
             "where s.ten_sp like ?";
-    Connection cn = DBConnect1.getConnection();
+    Connection cn = DBConnect.getConnection();
     try {
         PreparedStatement pstm = cn.prepareStatement(sql);
         pstm.setObject(1, ten);

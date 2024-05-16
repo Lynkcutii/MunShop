@@ -4,8 +4,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 public class DBConnect1 {
   public static String USER = "sa";
-    public static String PASSWORD = "12";
-    public static String URL = "jdbc:sqlserver://localhost:1433;databaseName=DUAN01;encrypt=true;trustServerCertificate=true; ";
+    public static String PASSWORD = "2004";
+    public static String URL = "jdbc:sqlserver://localhost:1433;databaseName=DA1_G62;encrypt=true;trustServerCertificate=true; ";
      static {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
