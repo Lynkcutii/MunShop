@@ -8,23 +8,22 @@ import Service.BH_SPSerice;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import Model.BanHang_SP;
-import com.formdev.flatlaf.FlatLightLaf;
+
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
-/**
- *
- * @author ADMIN
- */
 public class ViewBanHang extends javax.swing.JFrame {
 
    DefaultTableModel mol = new DefaultTableModel();
+      DefaultTableModel molGH = new DefaultTableModel();
+
+   
+    ArrayList<BanHang_SP> listGH = new ArrayList<>();
     private final BH_SPSerice bhs = new BH_SPSerice();
     public ViewBanHang() {
         initComponents();
         mol = (DefaultTableModel)tblSPCT.getModel();
+        molGH = (DefaultTableModel)tblGioihang.getModel();
         load();
 
         
@@ -48,7 +47,7 @@ public class ViewBanHang extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblGioihang = new javax.swing.JTable();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
@@ -56,8 +55,8 @@ public class ViewBanHang extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblSPCT = new javax.swing.JTable();
         btnTK = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
-        textField1 = new untiti.TextField();
+        btnAdd = new javax.swing.JButton();
+        txtTK = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -157,18 +156,18 @@ public class ViewBanHang extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Giỏ hàng", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13))); // NOI18N
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblGioihang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Tên SP", "Màu sắc", "Size", "Chất liệu vải", "Thương hiệu", "Loại", "Giá bán", "Số lượng", "Thành tiền"
+                "Tên SP", "Màu sắc", "Size", "Chất liệu vải", "Thương hiệu", "Số lượng", "Giá bán", "Thành tiền"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblGioihang);
 
         jButton8.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         jButton8.setText("Làm mới");
@@ -228,13 +227,13 @@ public class ViewBanHang extends javax.swing.JFrame {
 
         tblSPCT.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "STT", "Tên SP", "Màu sắc", "Size", "Chất liệu vải", "Thương hiệu", "Loại", "Giá bán", "Số lượng"
+                "STT", "Tên SP", "Màu sắc", "Size", "Chất liệu vải", "Thương hiệu", "Số lượng", "Giá bán"
             }
         ));
         jScrollPane3.setViewportView(tblSPCT);
@@ -247,15 +246,13 @@ public class ViewBanHang extends javax.swing.JFrame {
             }
         });
 
-        jButton12.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jButton12.setText("Thêm");
-        jButton12.addActionListener(new java.awt.event.ActionListener() {
+        btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnAdd.setText("Thêm");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton12ActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
-
-        textField1.setLabelText("Tìm kiếm.....");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -264,12 +261,12 @@ public class ViewBanHang extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(99, 99, 99)
+                        .addGap(94, 94, 94)
+                        .addComponent(txtTK, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
                         .addComponent(btnTK)
                         .addGap(141, 141, 141)
-                        .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 895, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -280,9 +277,9 @@ public class ViewBanHang extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTK, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTK, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 6, Short.MAX_VALUE))
@@ -521,24 +518,75 @@ public class ViewBanHang extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void btnTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTKActionPerformed
-        // TODO add your handling code here:
-//        String ten = txtTK.getText();
-//        ten = "%" + ten + "%";
-//        if (bhs.find(ten) != null) {
-//            this.loadTableTimKiem(bhs.find(ten));
-//            if (tblSPCT.getRowCount() > 0) {
-//                tblSPCT.setRowSelectionInterval(0, 0);
-//
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Không thấy ");
-//
-//        }
+        String ten = txtTK.getText();
+    List<BanHang_SP> foundItems = bhs.find(ten);
+
+    if (foundItems != null && !foundItems.isEmpty()) {
+        DefaultTableModel model = (DefaultTableModel) tblSPCT.getModel();
+        model.setRowCount(0); // Xóa tất cả các hàng trong bảng trước khi thêm kết quả tìm kiếm mới
+
+        for (BanHang_SP item : foundItems) {
+            Object[] rowData = new Object[] {
+                item.getId(),
+                item.getTen(),
+                item.getMauS(),
+                item.getKt(),
+                item.getChatLieu(),
+                item.getThuongHieu(),
+                item.getSoLuong(),
+                item.getGia()
+            };
+            model.addRow(rowData);
+        }
+
+       
+    } else {
+        JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm với tên: " + ten);
+    }
+
     }//GEN-LAST:event_btnTKActionPerformed
 
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton12ActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+       
+       int selectedRow = tblSPCT.getSelectedRow();
+String id = (String) tblSPCT.getValueAt(selectedRow, 0);
+int soLuongConLaiSPCT = (int) tblSPCT.getValueAt(selectedRow, 2);
+
+if (soLuongConLaiSPCT <= 0) {
+    JOptionPane.showMessageDialog(this, "Sản phẩm này đã hết hàng!");
+} else {
+    try {
+        String stringSoLuong = JOptionPane.showInputDialog(this, "Nhập số lượng cần thêm:", "Thông báo:", HEIGHT);
+
+        if (stringSoLuong != null && !stringSoLuong.trim().isEmpty()) {
+            int soLuong = Integer.parseInt(stringSoLuong);
+
+            if (soLuong <= 0) {
+                JOptionPane.showMessageDialog(this, "Số lượng nhập vào phải >= 0");
+            } else {
+                BanHang_SP sp = (BanHang_SP) bhs.find(id);
+
+                // Kiểm tra số lượng còn lại trong kho
+                int soLuongConLai = (int) tblSPCT.getValueAt(selectedRow, 7);
+                if (soLuong > soLuongConLai) {
+                    JOptionPane.showMessageDialog(this, "Số lượng thêm vào giỏ hàng phải <= số lượng còn");
+                } else {
+                    // Thêm sản phẩm vào giỏ hàng
+                    // Sử dụng đối tượng 'cart' đã khởi tạo trước đó
+                   
+                    JOptionPane.showMessageDialog(this, "Sản phẩm đã được thêm vào giỏ hàng!");
+
+                    // Cập nhật bảng giỏ hàng
+                    showDataGH(listGH);
+                }
+            }
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Số lượng nhập vào phải là số nguyên!");
+    }
+}
+        
+    }//GEN-LAST:event_btnAddActionPerformed
 
     /**
      * @param args the command line arguments
@@ -592,9 +640,9 @@ public class ViewBanHang extends javax.swing.JFrame {
                 bh.getKt(),
                 bh.getChatLieu(),
                 bh.getThuongHieu(),
-                bh.getLoai(),
+                bh.getSoLuong(),
                 bh.getGia(),
-                bh.getSoLuong()
+                
                 
             });
         }
@@ -620,13 +668,20 @@ public class ViewBanHang extends javax.swing.JFrame {
 //        }
 //
 //    }
+     private void showDataGH(List<BanHang_SP> list) {
+        molGH.setRowCount(0);
+        for (BanHang_SP spct : list) {
+            molGH.addRow(spct.toDataRow());
+        }
+
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnTK;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
@@ -653,14 +708,14 @@ public class ViewBanHang extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
+    private javax.swing.JTable tblGioihang;
     private javax.swing.JTable tblSPCT;
-    private untiti.TextField textField1;
+    private javax.swing.JTextField txtTK;
     // End of variables declaration//GEN-END:variables
 }

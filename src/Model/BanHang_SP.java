@@ -4,6 +4,8 @@
  */
 package Model;
 
+import java.util.Vector;
+
 /**
  *
  * @author ADMIN
@@ -14,7 +16,6 @@ public class BanHang_SP {
     private String mauS;
     private String kt;
     private String chatLieu;
-    private String loai;
     private String thuongHieu;
     private Double gia;
     private int soLuong;
@@ -22,13 +23,12 @@ public class BanHang_SP {
     public BanHang_SP() {
     }
 
-    public BanHang_SP(Integer id, String ten, String mauS, String kt, String chatLieu, String loai, String thuongHieu, Double gia, int soLuong) {
+    public BanHang_SP(Integer id, String ten, String mauS, String kt, String chatLieu, String thuongHieu, Double gia, int soLuong) {
         this.id = id;
         this.ten = ten;
         this.mauS = mauS;
         this.kt = kt;
         this.chatLieu = chatLieu;
-        this.loai = loai;
         this.thuongHieu = thuongHieu;
         this.gia = gia;
         this.soLuong = soLuong;
@@ -74,13 +74,8 @@ public class BanHang_SP {
         this.chatLieu = chatLieu;
     }
 
-    public String getLoai() {
-        return loai;
-    }
-
-    public void setLoai(String loai) {
-        this.loai = loai;
-    }
+   
+    
 
     public String getThuongHieu() {
         return thuongHieu;
@@ -104,6 +99,10 @@ public class BanHang_SP {
 
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
+    }
+
+    public Vector<?> toDataRow() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     

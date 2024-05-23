@@ -18,28 +18,27 @@ import java.util.List;
 public class BH_SPSerice {
     public ArrayList<BanHang_SP> getAllSP(){
         ArrayList<BanHang_SP> lst = new ArrayList<>();
-        String sql = "select sct.id,s.ten_sp,m.ten_mau, sz.ten_size, c.ten_chat_lieu, t.ten_thuong_hieu, l.ten_loai,gia_ban,so_luong_ton from SPCT sct\n" +
-"join SanPham s on s.id = sct.id_sp\n" +
-"join Size sz on sz.id = sct.id_size\n" +
-"join ChatLieuVai c on c.id = sct.id_chat_lieu_vai\n" +
-"join ThuongHieu t on t.id = sct.id_thuong_hieu\n" +
-"join LoaiAo l on l.id = sct.id_loai_ao\n" +
-"join Mau m on m.id = sct.id_mau";
+        String sql = "select sct.IDSPCT,s.TENSP,m.TENMAU,z.TENSIZE,c.TENCHATLIEU,t.TENTHUONGHIEU,SOLUONG,GIA from SanPhamChiTiet sct \n" +
+"join SanPham s on s.IDSANPHAM= sct.IDSANPHAM\n" +
+"join MauSac m on m.IDMAUSAC = sct.IDMAUSAC\n" +
+"join ChatLieu c on c.IDCHATLIEU = sct.IDCHATLIEU\n" +
+"join Size z on z.IDSIZE = sct.IDSIZE\n" +
+"join ThuongHieu t on t.IDTHUONGHIEU = sct.IDTHUONGHIEU";
         Connection c = DBConnect1.getConnection();
         try {
             PreparedStatement pstm = c.prepareStatement(sql);
             ResultSet rs = pstm.executeQuery();
             while(rs.next()){
                 BanHang_SP bh = new BanHang_SP();
-                bh.setId(rs.getInt("id"));
-                bh.setTen(rs.getString("ten_sp"));
-                bh.setMauS(rs.getString("ten_mau"));
-                bh.setKt(rs.getString("ten_size"));
-                bh.setChatLieu(rs.getString("ten_chat_lieu"));
-                bh.setThuongHieu(rs.getString("ten_thuong_hieu"));
-                bh.setLoai(rs.getString("ten_loai"));
-                bh.setGia(rs.getDouble("gia_ban"));
-                bh.setSoLuong(rs.getInt("so_luong_ton"));
+                bh.setId(rs.getInt("IDSPCT"));
+                bh.setTen(rs.getString("TENSP"));
+                bh.setMauS(rs.getString("TENMAU"));
+                bh.setKt(rs.getString("TENSIZE"));
+                bh.setChatLieu(rs.getString("TENCHATLIEU"));
+                bh.setThuongHieu(rs.getString("TENTHUONGHIEU"));
+                bh.setSoLuong(rs.getInt("SOLUONG"));
+                bh.setGia(rs.getDouble("GIA"));
+                
                 lst.add(bh);
             }
         } catch (Exception e) {
@@ -47,42 +46,44 @@ public class BH_SPSerice {
         }
         return lst;
     }
-    public List<BanHang_SP> find(String ten) {
-    List<BanHang_SP> lstTK = new ArrayList<>();
-            
-    String sql = "select sct.id, s.ten_sp, m.ten_mau, sz.ten_size, c.ten_chat_lieu, t.ten_thuong_hieu, l.ten_loai, gia_ban, so_luong_ton " +
-            "from SPCT sct " +
-            "join SanPham s on s.id = sct.id_sp " +
-            "join Size sz on sz.id = sct.id_size " +
-            "join ChatLieuVai c on c.id = sct.id_chat_lieu_vai " +
-            "join ThuongHieu t on t.id = sct.id_thuong_hieu " +
-            "join LoaiAo l on l.id = sct.id_loai_ao " +
-            "join Mau m on m.id = sct.id_mau " + // Add a space here
-            "where s.ten_sp like ?";
-    Connection cn = DBConnect1.getConnection();
-    try {
-        PreparedStatement pstm = cn.prepareStatement(sql);
-        pstm.setObject(1, ten);
-        ResultSet rs = pstm.executeQuery();
-        while (rs.next()) {
-           BanHang_SP bh = new BanHang_SP();
-            bh.setId(rs.getInt("id"));
-            bh.setTen(rs.getString("ten_sp"));
-            bh.setMauS(rs.getString("ten_mau"));
-            bh.setKt(rs.getString("ten_size"));
-            bh.setChatLieu(rs.getString("ten_chat_lieu"));
-            bh.setThuongHieu(rs.getString("ten_thuong_hieu"));
-            bh.setLoai(rs.getString("ten_loai"));
-            bh.setGia(rs.getDouble("gia_ban"));
-            bh.setSoLuong(rs.getInt("so_luong_ton"));
-            
+ public List<BanHang_SP> find(String ten) {
+        List<BanHang_SP> lstTK = new ArrayList<>();
+        
+        String sql = "SELECT sct.IDSPCT, s.TENSP, m.TENMAU, c.TENCHATLIEU, z.TENSIZE, t.TENTHUONGHIEU, SOLUONG, GIA " +
+                     "FROM SanPhamChiTiet sct " +
+                     "JOIN SanPham s ON s.IDSANPHAM = sct.IDSANPHAM " +
+                     "JOIN MauSac m ON m.IDMAUSAC = sct.IDMAUSAC " +
+                     "JOIN ChatLieu c ON c.IDCHATLIEU = sct.IDCHATLIEU " +
+                     "JOIN Size z ON z.IDSIZE = sct.IDSIZE " +
+                     "JOIN ThuongHieu t ON t.IDTHUONGHIEU = sct.IDTHUONGHIEU " +
+                     "WHERE s.TENSP LIKE ?";
+        
+        try (Connection cn = DBConnect1.getConnection();
+             PreparedStatement pstm = cn.prepareStatement(sql)) {
+             
+            pstm.setString(1, "%" + ten + "%"); // Sử dụng % để tìm kiếm tất cả các giá trị chứa mã ma
+            try (ResultSet rs = pstm.executeQuery()) {
+                while (rs.next()) {
+                    BanHang_SP bh = new BanHang_SP();
+                    bh.setId(rs.getInt("IDSPCT"));
+                    bh.setTen(rs.getString("TENSP"));
+                    bh.setMauS(rs.getString("TENMAU"));
+                    bh.setKt(rs.getString("TENSIZE"));
+                    bh.setChatLieu(rs.getString("TENCHATLIEU"));
+                    bh.setThuongHieu(rs.getString("TENTHUONGHIEU"));
+                    bh.setSoLuong(rs.getInt("SOLUONG"));
+                    bh.setGia(rs.getDouble("GIA"));
+                    
+                    lstTK.add(bh); // Thêm đối tượng vào danh sách
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         
-    } catch (Exception e) {
-        System.out.println(e);
+        return lstTK;
     }
-    return lstTK;
-}
+
 
     
     
