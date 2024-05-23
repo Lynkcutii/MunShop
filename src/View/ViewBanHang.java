@@ -4,32 +4,39 @@
  */
 package View;
 
-import Service.BH_SPSerice;
+import MODEL.HoaDon;
+import Service.HoaDonService;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
-import Model.BanHang_SP;
-import com.formdev.flatlaf.FlatLightLaf;
-import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
- * @author ADMIN
+ * @author HK
  */
 public class ViewBanHang extends javax.swing.JFrame {
 
-   DefaultTableModel mol = new DefaultTableModel();
-    private final BH_SPSerice bhs = new BH_SPSerice();
+    private DefaultTableModel model;
+    HoaDonService repo = new HoaDonService();
+    ArrayList<HoaDon> list = new ArrayList<>();
+
     public ViewBanHang() {
         initComponents();
-        mol = (DefaultTableModel)tblSPCT.getModel();
-        load();
-
-        
+        model = (DefaultTableModel) tblHoaDon.getModel();
+        loadHoaDonCho();
     }
 
+    void loadHoaDonCho() {
+//        model.setRowCount(0);
+        for (HoaDon hoaDon : list) {
+            model.addRow(new Object[]{
+                hoaDon.getMaHD(),
+                hoaDon.getTongTien(),
+                hoaDon.getNgayTao(),
+                hoaDon.getTrangThai()
+            });
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,21 +50,21 @@ public class ViewBanHang extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblHoaDon = new javax.swing.JTable();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblGioHang = new javax.swing.JTable();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
+        jTextField1 = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblSPCT = new javax.swing.JTable();
-        btnTK = new javax.swing.JButton();
+        jTable3 = new javax.swing.JTable();
+        jButton11 = new javax.swing.JButton();
         jButton12 = new javax.swing.JButton();
-        textField1 = new untiti.TextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -94,7 +101,7 @@ public class ViewBanHang extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -105,7 +112,12 @@ public class ViewBanHang extends javax.swing.JFrame {
                 "Mã HĐ", "Tổng tiền", "Ngày tạo", "Trạng thái"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblHoaDonMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblHoaDon);
 
         jButton6.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         jButton6.setText("Hủy hóa đơn");
@@ -157,7 +169,7 @@ public class ViewBanHang extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Giỏ hàng", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13))); // NOI18N
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblGioHang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -168,7 +180,7 @@ public class ViewBanHang extends javax.swing.JFrame {
                 "Tên SP", "Màu sắc", "Size", "Chất liệu vải", "Thương hiệu", "Loại", "Giá bán", "Số lượng", "Thành tiền"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblGioHang);
 
         jButton8.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         jButton8.setText("Làm mới");
@@ -226,7 +238,9 @@ public class ViewBanHang extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sản phẩm", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13))); // NOI18N
 
-        tblSPCT.setModel(new javax.swing.table.DefaultTableModel(
+        jTextField1.setText("Tìm kiếm.......");
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -237,13 +251,13 @@ public class ViewBanHang extends javax.swing.JFrame {
                 "STT", "Tên SP", "Màu sắc", "Size", "Chất liệu vải", "Thương hiệu", "Loại", "Giá bán", "Số lượng"
             }
         ));
-        jScrollPane3.setViewportView(tblSPCT);
+        jScrollPane3.setViewportView(jTable3);
 
-        btnTK.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        btnTK.setText("Tìm kiếm");
-        btnTK.addActionListener(new java.awt.event.ActionListener() {
+        jButton11.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        jButton11.setText("Tìm kiếm");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTKActionPerformed(evt);
+                jButton11ActionPerformed(evt);
             }
         });
 
@@ -255,8 +269,6 @@ public class ViewBanHang extends javax.swing.JFrame {
             }
         });
 
-        textField1.setLabelText("Tìm kiếm.....");
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -264,24 +276,23 @@ public class ViewBanHang extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(99, 99, 99)
-                        .addComponent(btnTK)
-                        .addGap(141, 141, 141)
+                        .addGap(123, 123, 123)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton11)
+                        .addGap(62, 62, 62)
                         .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 895, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTK, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -508,37 +519,30 @@ public class ViewBanHang extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton9ActionPerformed
-
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton10ActionPerformed
 
-    private void btnTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTKActionPerformed
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         // TODO add your handling code here:
-//        String ten = txtTK.getText();
-//        ten = "%" + ten + "%";
-//        if (bhs.find(ten) != null) {
-//            this.loadTableTimKiem(bhs.find(ten));
-//            if (tblSPCT.getRowCount() > 0) {
-//                tblSPCT.setRowSelectionInterval(0, 0);
-//
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Không thấy ");
-//
-//        }
-    }//GEN-LAST:event_btnTKActionPerformed
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
+        // TODO add your handling code here:
+        int row = tblHoaDon.getSelectedRow();
+    }//GEN-LAST:event_tblHoaDonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -571,61 +575,15 @@ public class ViewBanHang extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-//                try {
-//            UIManager.setLookAndFeel(new FlatLightLaf());
-//        } catch (UnsupportedLookAndFeelException ex) {
-////            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//        }
                 new ViewBanHang().setVisible(true);
-                
             }
         });
     }
-     private  void load(){
-    mol.setRowCount(0);
-        ArrayList<BanHang_SP> lst = bhs.getAllSP();
-        for (BanHang_SP bh : lst) {
-            mol.addRow(new Object[]{
-            bh.getId(),
-                bh.getTen(),
-                bh.getMauS(),
-                bh.getKt(),
-                bh.getChatLieu(),
-                bh.getThuongHieu(),
-                bh.getLoai(),
-                bh.getGia(),
-                bh.getSoLuong()
-                
-            });
-        }
-    }
-     private void showD(){
-    int index = tblSPCT.getSelectedRow();
-     }
-//     private void loadTableTimKiem(List<BanHang_SP> listTimSP) {
-//
-//        mol.setRowCount(0);
-//        for (BanHang_SP bh : listTimSP) {
-//            mol.addRow(new Object[]{
-//                bh.getId(),
-//                bh.getTen(),
-//                bh.getMauS(),
-//                bh.getKt(),
-//                bh.getChatLieu(),
-//                bh.getThuongHieu(),
-//                bh.getLoai(),
-//                bh.getGia(),
-//                bh.getSoLuong()
-//            });
-//        }
-//
-//    }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnTK;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -652,15 +610,15 @@ public class ViewBanHang extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
-    private javax.swing.JTable tblSPCT;
-    private untiti.TextField textField1;
+    private javax.swing.JTable tblGioHang;
+    private javax.swing.JTable tblHoaDon;
     // End of variables declaration//GEN-END:variables
 }
