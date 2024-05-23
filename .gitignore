@@ -1,3 +1,4 @@
 /dist/
+build/*
 *.class
 nbproject/private/config.properties
