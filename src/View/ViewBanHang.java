@@ -5,7 +5,7 @@
 package VIEW;
 
 import MODEL.HoaDon;
-import REPO.HoaDonRepo;
+import Service.HoaDonService;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 public class ViewBanHang extends javax.swing.JFrame {
 
     private DefaultTableModel model;
-    HoaDonRepo repo = new HoaDonRepo();
+    HoaDonService repo = new HoaDonService();
     ArrayList<HoaDon> list = new ArrayList<>();
 
     public ViewBanHang() {

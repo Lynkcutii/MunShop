@@ -4,25 +4,17 @@
  */
 package MODEL;
 
+import java.util.Date;
+
 /**
  *
  * @author HK
  */
 public class KhachHang {
-    
-    private String ma, ten, gioitinh, sdt, email, trangthai;
-
-    public KhachHang() {
-    }
-
-    public KhachHang(String ma, String ten, String gioitinh, String sdt, String email, String trangthai) {
-        this.ma = ma;
-        this.ten = ten;
-        this.gioitinh = gioitinh;
-        this.sdt = sdt;
-        this.email = email;
-        this.trangthai = trangthai;
-    }
+    private String ma, hoTen, gioiTinh, sdt;
+//    private Date ngaySinh;
+    private String email;
+    private String trangThai;
 
     public String getMa() {
         return ma;
@@ -32,20 +24,20 @@ public class KhachHang {
         this.ma = ma;
     }
 
-    public String getTen() {
-        return ten;
+    public String getHoTen() {
+        return hoTen;
     }
 
-    public void setTen(String ten) {
-        this.ten = ten;
+    public void setHoTen(String hoTen) {
+        this.hoTen = hoTen;
     }
 
-    public String getGioitinh() {
-        return gioitinh;
+    public String getGioiTinh() {
+        return gioiTinh;
     }
 
-    public void setGioitinh(String gioitinh) {
-        this.gioitinh = gioitinh;
+    public void setGioiTinh(String gioiTinh) {
+        this.gioiTinh = gioiTinh;
     }
 
     public String getSdt() {
@@ -56,6 +48,14 @@ public class KhachHang {
         this.sdt = sdt;
     }
 
+//    public Date getNgaySinh() {
+//        return ngaySinh;
+//    }
+//
+//    public void setNgaySinh(Date ngaySinh) {
+//        this.ngaySinh = ngaySinh;
+//    }
+
     public String getEmail() {
         return email;
     }
@@ -63,13 +63,26 @@ public class KhachHang {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getTrangthai() {
-        return trangthai;
+    
+    public String getTrangThai() {
+        return trangThai;
     }
 
-    public void setTrangthai(String trangthai) {
-        this.trangthai = trangthai;
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+    }
+
+    public KhachHang(String ma, String hoTen, String gioiTinh, String sdt, String email,String trangThai) {
+        this.ma = ma;
+        this.hoTen = hoTen;
+        this.gioiTinh = gioiTinh;
+        this.sdt = sdt;
+//        this.ngaySinh = ngaySinh;
+        this.email = email;
+        this.trangThai = trangThai;
+    }
+
+    public KhachHang() {
     }
 
 }

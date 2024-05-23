@@ -2,10 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package REPO;
+package Service;
 
 import MODEL.HoaDon;
 import MODEL.KhachHang;
+import Repo.DBConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +19,7 @@ import java.util.List;
  *
  * @author HK
  */
-public class HoaDonRepo {
+public class HoaDonService {
 
     Connection con = null;
     PreparedStatement ps = null;
@@ -27,7 +28,7 @@ public class HoaDonRepo {
     public ArrayList<HoaDon> getAll(){
         ArrayList<HoaDon> list = new ArrayList<>();
     try {
-        Connection conn = DBConnect1.getConnection();
+        Connection conn = DBConnect.getConnection();
         String sql = "SELECT MaHD, TongTien, NgayTao, TrangThai FROM HoaDon " +
                      "WHERE HoaDon.TrangThai = 0";
         Statement stm = conn.createStatement();
