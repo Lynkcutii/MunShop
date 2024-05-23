@@ -5,6 +5,9 @@
 package SERVICE;
 
 import MODEL.Voucher;
+import REPO.DBConnect1;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.ResultSet;
@@ -74,16 +77,112 @@ public class VoucherService {
     public  List<Voucher> getAllVoucher(){
         return selectbySQLVoucher(getAll);
     }
-    public void addVC(String maVC){
-        JDBCHelper.excuteUpdate(insertVC, maVC);
+   public String addVoucher(Voucher vc) {
+
+        try {
+            List<Voucher> listVoucher = new ArrayList<>();
+            String database = "DUAN1";
+            String Insert = "INSERT INTO [dbo].[VOUCHER]\n"
+                    + "           ([MAVOUCHER]\n"
+                    + "           ,[TENVOUCHER]\n"
+                    + "           ,[DONTOITHIEU]\n"
+                    + "           ,[MUCGIAMGIA]\n"
+                    + "           ,[LOAIVC]\n"
+                    + "           ,[SOLUONG]\n"
+                    + "           ,[NGAYBATDAU]\n"
+                    + "           ,[NGAYKETTHUC]\n"
+                    + "           ,[NGAYTAO]\n"
+                    + "           ,[TRANGTHAI])\n"
+                    + "     VALUES\n"
+                    + "           (?,?,?,?,?,?,?,?,getdate(),1)";
+
+            Connection con = DBConnect1.getConnection();
+            PreparedStatement ps = con.prepareStatement(Insert);
+            ps.setObject(1, vc.getMaVoucher());
+            ps.setObject(2, vc.getTenVoucher());
+            ps.setObject(3, vc.getDonToiThieu());
+            ps.setObject(4, vc.getMucGiamGia());
+            ps.setObject(5, vc.getLoaiGG());
+            ps.setObject(6, vc.getSoLuong());
+            ps.setObject(7, vc.getNgayBatDau());
+            ps.setObject(8, vc.getNgayKetThuc());
+            if (ps.executeUpdate() < 1) {
+                return "add that bai";
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return "add thành công";
     }
     public void updateSL(Voucher vc){
         JDBCHelper.excuteUpdate(updateSL,vc.getSoLuong()-1,vc.getMaVoucher());
     }
-    public void updateVC(Voucher vc,int id){
-        JDBCHelper.excuteUpdate(updateVC, id);
+    public String updateVoucher(Voucher vc, int id) {
+        try {
+            String database = "DUAN1";
+            String Update = "UPDATE [dbo].[VOUCHER]\n"
+                    + "   SET [MAVOUCHER] = ?\n"
+                    + "      ,[TENVOUCHER] = ?\n"
+                    + "      ,[DONTOITHIEU] = ?\n"
+                    + "      ,[MUCGIAMGIA] = ?\n"
+                    + "      ,[LOAIVC] = ?\n"
+                    + "      ,[SOLUONG] = ?"
+                    + "      ,[NGAYBATDAU] = ?\n"
+                    + "      ,[NGAYKETTHUC] = ?\n"
+                    + "      ,[NGAYSUA] = getdate()\n"
+                    + " WHERE IDVoucher = ?";
+            Connection con = DBConnect1.getConnection();
+            PreparedStatement ps = con.prepareStatement(Update);
+            ps.setObject(1, vc.getMaVoucher());
+            ps.setObject(2, vc.getTenVoucher());
+            ps.setObject(3, vc.getDonToiThieu());
+            ps.setObject(4, vc.getMucGiamGia());
+            ps.setObject(5, vc.getLoaiGG());
+            ps.setObject(6, vc.getSoLuong());
+            ps.setObject(7, vc.getNgayBatDau());
+            ps.setObject(8, vc.getNgayKetThuc());
+            ps.setObject(9, id);
+            if (ps.executeUpdate() < 1) {
+                return "Sửa that bai";
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return "Sửa thành công";
     }
-    public void searchVC(String ma){
-        JDBCHelper.excuteUpdate(searchVC, ma);
+    public List<Voucher> search(String ma) {
+        List<Voucher> list = new ArrayList<>();
+        try {
+            String Find = "select * from VOUCHER where (TENVOUCHER like ? "
+                    + "or DONTOITHIEU like ? or MUCGIAMGIA like ? "
+                    + "or LOAIVC like ? or SOLUONG like ? or MAVOUCHER like ?) and TrangThai = 1";
+            Connection con = DBConnect1.getConnection();
+            PreparedStatement ps = con.prepareStatement(Find);
+            ps.setObject(1, "%" + ma + "%");
+            ps.setObject(2, "%" + ma + "%");
+            ps.setObject(3, "%" + ma + "%");
+            ps.setObject(4, "%" + ma + "%");
+            ps.setObject(5, "%" + ma + "%");
+            ps.setObject(6, "%" + ma + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Voucher vc = new Voucher();
+                vc.setId(rs.getInt("IDVOUCHER"));
+                vc.setMaVoucher(rs.getString("MAVOUCHER"));
+                vc.setTenVoucher(rs.getString("TENVOUCHER"));
+                vc.setDonToiThieu(rs.getDouble("DONTOITHIEU"));
+                vc.setMucGiamGia(rs.getDouble("MUCGIAMGIA"));
+                vc.setLoaiGG(rs.getString("LOAIVC"));
+                vc.setSoLuong(rs.getInt("SOLUONG"));
+                vc.setNgayBatDau(rs.getDate("NGAYBATDAU"));
+                vc.setNgayKetThuc(rs.getDate("NGAYKETTHUC"));
+                vc.setNgayTao(rs.getDate("NGAYTAO"));
+                vc.setTrangThai(rs.getBoolean("TRANGTHAI"));
+                list.add(vc);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return list;
     }
 }

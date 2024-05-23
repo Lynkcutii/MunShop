@@ -57,7 +57,17 @@ public class ViewVoucher extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }
+    public void showInfor(Voucher vc){
+    txtMaVoucher.setText(vc.getMaVoucher());
+    txtTenVouCher.setText(vc.getTenVoucher());
+    txtDonToiThieu.setText(vc.getDonToiThieu()+"");
+    txtMucGiamGia.setText(vc.getMucGiamGia()+"");
+    txtSoluong.setText(vc.getSoLuong()+"");
+    cboLoaiGG.setSelectedItem(vc.getLoaiGG());
+    txtNgayBatDau.setDate(vc.getNgayBatDau());
+    txtNgayKetThuc.setDate(vc.getNgayKetThuc());
     
+}
     void showData(List<Voucher> list) {
         model = (DefaultTableModel) tblVocher.getModel();
         model.setRowCount(0);
@@ -79,22 +89,42 @@ public class ViewVoucher extends javax.swing.JFrame {
             });
         }
     }
-    void getForm(){
+    
+    Voucher getForm(){
         Voucher vc = new Voucher();
-        if(txtMaVoucher.getText().isEmpty() || txtTenVouCher.getText().isEmpty() || txtDonToiThieu.getText().isEmpty() || txtMucGiamGia.getText().isEmpty() || txtSoLuong.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "vui lòng nhập đầy đủ thông tin");
+        if (txtMaVoucher.getText().isEmpty() || txtTenVouCher.getText().isEmpty() || txtDonToiThieu.getText().isEmpty()
+                || txtMucGiamGia.getText().isEmpty() || txtSoluong.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui Lòng Nhập đủ Thông Tin");
+            return null;
         }
         vc.setMaVoucher(txtMaVoucher.getText());
         vc.setTenVoucher(txtTenVouCher.getText());
         try {
             vc.setDonToiThieu(Double.valueOf(txtDonToiThieu.getText()));
             vc.setMucGiamGia(Double.valueOf(txtMucGiamGia.getText()));
-            vc.setSoLuong(Integer.valueOf(txtSoLuong.getText()));
-            if(Double.valueOf(txtDonToiThieu.getText())<0 || Double.valueOf(txtMucGiamGia.getText())< 0|| Integer.valueOf(txtSoLuong.getText())< 0){
-                JOptionPane.showMessageDialog(this, "vui lòng k nhập số âm");
+            vc.setSoLuong(Integer.valueOf(txtSoluong.getText()));
+            if (Double.valueOf(txtDonToiThieu.getText()) < 0 || Double.valueOf(txtMucGiamGia.getText()) < 0 || Integer.valueOf(txtSoluong.getText()) < 0) {
+                JOptionPane.showMessageDialog(this, "Vui LÒng Không Nhập Số Âm");
+                return null;
             }
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Vui Lòng Nhập Đúng Kiểu Số");
+            return null;
         }
+        vc.setLoaiGG(cboLoaiGG.getSelectedItem().toString());
+        if (cboLoaiGG.getSelectedItem().toString().equalsIgnoreCase("%")) {
+            if (Double.valueOf(txtMucGiamGia.getText()) > 50) {
+                JOptionPane.showMessageDialog(this, "Không Nhập Phần Trăm Voucher quá 50");
+                return null;
+            }
+        }
+        try {
+            vc.setNgayBatDau(txtNgayBatDau.getDate());
+            vc.setNgayKetThuc(txtNgayKetThuc.getDate());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Vui Lòng Nhập Đúng Kiểu Ngày");
+        }
+        return vc;
     }
 
     /**
@@ -129,7 +159,7 @@ public class ViewVoucher extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtSoLuong = new javax.swing.JTextField();
+        txtSoluong = new javax.swing.JTextField();
         cboLoaiGG = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -137,10 +167,20 @@ public class ViewVoucher extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("PHIẾU GIẢM GIÁ"));
 
         jButton2.setText("Sửa");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Mức giảm giá");
 
         jButton3.setText("làm mới");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Loại giảm giá");
 
@@ -165,6 +205,11 @@ public class ViewVoucher extends javax.swing.JFrame {
                 "STT", "Mã Voucher", "Tên Voucher", "Đơn tối thiểu", "Mức giảm giá", "Loại giảm giá", "Số lượng", "Ngày bắt đầu", "Ngày Kết thức", "Trạng thái"
             }
         ));
+        tblVocher.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblVocherMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblVocher);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -184,9 +229,20 @@ public class ViewVoucher extends javax.swing.JFrame {
                 .addContainerGap(57, Short.MAX_VALUE))
         );
 
+        txtTimKiem.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTimKiemKeyTyped(evt);
+            }
+        });
+
         jLabel2.setText("Tên giảm giá");
 
         jButton1.setText("Thêm");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel9.setText("Tìm kiếm");
 
@@ -237,7 +293,7 @@ public class ViewVoucher extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel5)
                                 .addComponent(jLabel6)
-                                .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtSoluong, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jButton3)
                             .addComponent(cboLoaiGG, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(50, 50, 50)
@@ -274,7 +330,7 @@ public class ViewVoucher extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtNgayKetThuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSoluong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtDonToiThieu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtTenVouCher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(42, 42, 42)
@@ -314,6 +370,55 @@ public class ViewVoucher extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cboLoaiGGActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (JOptionPane.showConfirmDialog(this, "Bạn có muốn thêm không ?") == 0) {
+            JOptionPane.showMessageDialog(this, vouSv.addVoucher(getForm()));
+            listVC = vouSv.getAllVoucher();
+            showData(listVC);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        try {
+            if (JOptionPane.showConfirmDialog(this, "Bạn có muốn thêm không ?") == 0) {
+                Voucher vc = new Voucher();
+                vc = vouSv.getAllVoucher().get(tblVocher.getSelectedRow());
+                JOptionPane.showMessageDialog(this, vouSv.updateVoucher(getForm(), vc.getId()));
+                listVC = vouSv.getAllVoucher();
+                showData(listVC);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Chưa chọn dòng để sửa");
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        reset();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void tblVocherMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVocherMouseClicked
+        // TODO add your handling code here:
+        showInfor(vouSv.getAllVoucher().get(tblVocher.getSelectedRow()));
+    }//GEN-LAST:event_tblVocherMouseClicked
+
+    private void txtTimKiemKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKiemKeyTyped
+        // TODO add your handling code here:
+        showData(vouSv.search(txtTimKiem.getText()));
+    }//GEN-LAST:event_txtTimKiemKeyTyped
+public void reset(){
+    txtMaVoucher.setText("");
+    txtDonToiThieu.setText("");
+    txtMucGiamGia.setText("");
+    txtSoluong.setText("");
+    txtTenVouCher.setText("");
+    txtNgayBatDau.setDateFormatString("");
+    txtNgayKetThuc.setDateFormatString("");
+    cboLoaiGG.setSelectedItem(0);
+    txtTimKiem.setText("");
+}
     /**
      * @param args the command line arguments
      */
@@ -380,7 +485,7 @@ public class ViewVoucher extends javax.swing.JFrame {
     private javax.swing.JTextField txtMucGiamGia;
     private com.toedter.calendar.JDateChooser txtNgayBatDau;
     private com.toedter.calendar.JDateChooser txtNgayKetThuc;
-    private javax.swing.JTextField txtSoLuong;
+    private javax.swing.JTextField txtSoluong;
     private javax.swing.JTextField txtTenVouCher;
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
